@@ -6,7 +6,7 @@ from .models import (
     Answer,
     Question,
     Quiz,       
-                    )
+)
 
 admin.site.register(Category)
 admin.site.register(Tag)

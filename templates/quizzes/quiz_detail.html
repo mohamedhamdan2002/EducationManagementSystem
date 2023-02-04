@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ quiz.title }}</h1>
+    <form action="{% url 'quizzes:quiz_result' quiz.category.category quiz.id %}">
+        <ol>
+        {% for q in quiz.questions.all %}
+            <li>
+                <h2>{{ q.question }}</h2>
+                {% for a in q.answers.all %}
+                    <div>
+                        <input type="radio" name="{{ q.question }}" value="{{ a.answer }}">
+                        <label for="{{ q.qestion }}">{{ a.answer }}</label>
+                    </div>
+                    <br>
+                {% endfor %}
+            </li>
+        {% endfor %}
+        </ol>
+        <input type="submit" value="submit">
+    </form>
+{% endblock content %}

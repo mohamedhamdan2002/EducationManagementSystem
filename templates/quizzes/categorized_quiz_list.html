@@ -1,13 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Categories: </h1>
-    {% for c in categories %}
-        <h1><a href="{% url 'quizzes:categorized_quiz_list' c.category %}">{{ c.category }}</a></h1>
-    {% endfor %}
-    <br>
-    <br>
-    <h1>Quizzes: </h1>
     {% for q in quizzes %}
         <h1><a href="{% url 'quizzes:quiz_detail' q.category q.id %}">{{ q.title }}</a></h1>
         <h2>category: {{ q.category }}</h2>
