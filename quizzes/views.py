@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from .models import Category, Quiz, Question
 
@@ -37,3 +39,7 @@ def quiz_result_view(request, category, id):
         "total": len(request.GET),
     }
     return render(request, 'quizzes/quiz_result.html', context)
+
+def search_view(request):
+    print(request.GET.get('q'))
+    return HttpResponseRedirect(reverse('quizzes:categorized_quiz_list', args=(request.GET.get('q'),)))
