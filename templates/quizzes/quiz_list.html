@@ -1,20 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Categories: </h1>
+    <h4>Categories: </h4>
+    <ul>
     {% for c in categories %}
-        <h1><a href="{% url 'quizzes:categorized_quiz_list' c.category %}">{{ c.category }}</a></h1>
+        <li><a href="{% url 'quizzes:categorized_quiz_list' c.category %}">{{ c.category }}</a></li>
     {% endfor %}
+    </ul>
     <br>
-    <br>
-    <h1>Quizzes: </h1>
+    <h4>Quizzes: </h4>
     {% for q in quizzes %}
-        <h1><a href="{% url 'quizzes:quiz_detail' q.category q.id %}">{{ q.title }}</a></h1>
-        <h2>category: {{ q.category }}</h2>
-        <h2>difficulty: {{ q.difficulty }}</h2>
-        <h2>tags: </h2>
-        {% for t in q.tags.all %}
-            <h3>{{ t.tag }}</h3>
-        {% endfor %}
+        <div class="card">
+            <div class="card-header">
+                <span class="font-weight-bold">
+                    <a href="{% url 'quizzes:quiz_detail' q.category q.id %}">{{ q.title }}</a>
+                </span> &middot;
+                <span class="text-muted">
+                    category: {{ q.category }} | difficulty: {{ q.difficulty }}
+                </span>
+            </div>
+            <div class="card-body">
+                <h6>tags: </h6>
+                {% for t in q.tags.all %}
+                    <span class="font-weight-bold">{{ t.tag }} &middot;</span>
+                {% endfor %}
+            </div>
+        </div>
+        <br>
     {% endfor %}
 {% endblock content %}
