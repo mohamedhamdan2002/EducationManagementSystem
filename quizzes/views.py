@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import Category, Quiz, Question
 
+@login_required
 def category_list_view(request):
     categories = Category.objects.all()
     quizzes = Quiz.objects.all()
@@ -13,6 +15,7 @@ def category_list_view(request):
     }
     return render(request, 'quizzes/quiz_list.html', context)
 
+@login_required
 def categorized_quiz_list_view(request, category):
     category = Category.objects.get(category=category)
     quiz = category.quizzes.all()
@@ -21,6 +24,7 @@ def categorized_quiz_list_view(request, category):
     }
     return render(request, 'quizzes/categorized_quiz_list.html', context)
 
+@login_required
 def quiz_detail_view(request, category, id):
     quiz = Quiz.objects.get(pk=id)
     context = {
@@ -28,6 +32,7 @@ def quiz_detail_view(request, category, id):
     }
     return render(request, 'quizzes/quiz_detail.html', context)
 
+@login_required
 def quiz_result_view(request, category, id):
     points = 0
     quiz = Quiz.objects.get(pk=id)
@@ -40,6 +45,7 @@ def quiz_result_view(request, category, id):
     }
     return render(request, 'quizzes/quiz_result.html', context)
 
+@login_required
 def search_view(request):
     print(request.GET.get('q'))
     return HttpResponseRedirect(reverse('quizzes:categorized_quiz_list', args=(request.GET.get('q'),)))
