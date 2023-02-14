@@ -2,7 +2,7 @@
 
 {% block content %}
     <h4>{{ quiz.title }}</h4><br>
-    <form action="{% url 'quizzes:quiz_result' quiz.category.category quiz.id %}">
+    <form action="{% url 'quizzes:quiz_result' quiz.category.category quiz.id %}" name="quiz">
     {% for q in quiz.questions.all %}
         <ol>
             <div class="card">
@@ -26,6 +26,6 @@
         </ol>
         <br>
     {% endfor %}
-    <button class="btn btn-success ml-2" type="submit">Submit answers</button>
+    <button class="btn btn-success ml-2" type="submit" for="quiz">Submit answers</button>
     </form>
 {% endblock content %}

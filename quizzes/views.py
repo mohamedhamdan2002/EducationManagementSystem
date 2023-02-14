@@ -35,11 +35,16 @@ def quiz_detail_view(request, category, id):
 @login_required
 def quiz_result_view(request, category, id):
     points = 0
-    quiz = Quiz.objects.get(pk=id)
+    quiz = Quiz.objects.get(pk=id) 
     for q in quiz.questions.all():
         if request.GET.get(q.question) == q.true_answer.answer:
             points += 1
+    print(request.GET)
     context = {
+        "answers": zip(
+            [q.question for q in quiz.questions.all()], 
+            [request.GET.get(q.question) for q in quiz.questions.all()],
+            [q.true_answer.answer for q in quiz.questions.all()]),
         "result": points,
         "total": len(request.GET),
     }
