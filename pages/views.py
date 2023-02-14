@@ -5,8 +5,4 @@ from django.urls import reverse
 
 
 def home_view(request):
-    name = 'Ebraheem'
-    HTML_TEXT = f"""
-        <h1>Hi there i'm {name} and i just starting my project
-    """
-    return HttpResponse(HTML_TEXT)
+    return render(request, 'index.html', {})

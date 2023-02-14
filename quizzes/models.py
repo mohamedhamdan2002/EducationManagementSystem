@@ -1,5 +1,6 @@
 from django.db import models
 
+from accounts.models import CustomUser
 
 
 class Category(models.Model):
@@ -45,4 +46,17 @@ class Quiz(models.Model):
     questions = models.ManyToManyField(Question)
 
     def __str__(self):
-        return self.title
+        return self.title 
+
+class Score(models.Model):
+    quiz = models.ForeignKey(
+        Quiz,
+        on_delete=models.CASCADE,
+        related_name='scores',
+    )
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='scores',
+    )
+    score = models.IntegerField()
