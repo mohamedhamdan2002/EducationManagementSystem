@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
+from funcs.validators import validate_email
 from .models import CustomUser
 
 def login_view(request):
     if request.POST:
         if request.user.is_authenticated:
             return redirect('pages:home')
-        email = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
-        print(email, password)
-        username = CustomUser.objects.get(email__iexact=email).username
+        if validate_email(username):
+            username = CustomUser.objects.get(email__iexact=username).username
         user = authenticate(request, username=username, password=password)
         if not user:
             return render(request, 'accounts/login.html', {'error': 'No user with this credintials'})
