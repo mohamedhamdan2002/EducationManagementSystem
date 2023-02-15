@@ -60,3 +60,6 @@ class Score(models.Model):
         related_name='scores',
     )
     score = models.IntegerField()
+
+    def __str__(self):
+        return f'{str(self.user)} ( {str(self.quiz)} ): {self.score}'

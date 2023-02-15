@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from .models import Category, Quiz, Question
+from .models import Category, Quiz, Question, Score
 
 @login_required
 def category_list_view(request):
@@ -39,7 +39,7 @@ def quiz_result_view(request, category, id):
     for q in quiz.questions.all():
         if request.GET.get(q.question) == q.true_answer.answer:
             points += 1
-    print(request.GET)
+    Score.objects.create(quiz=quiz, user=request.user, score=points)
     context = {
         "answers": zip(
             [q.question for q in quiz.questions.all()], 
@@ -52,5 +52,4 @@ def quiz_result_view(request, category, id):
 
 @login_required
 def search_view(request):
-    print(request.GET.get('q'))
     return HttpResponseRedirect(reverse('quizzes:categorized_quiz_list', args=(request.GET.get('q'),)))

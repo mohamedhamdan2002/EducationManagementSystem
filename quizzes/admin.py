@@ -5,7 +5,8 @@ from .models import (
     Tag,
     Answer,
     Question,
-    Quiz,       
+    Quiz,
+    Score,  
 )
 
 admin.site.register(Category)
@@ -13,3 +14,4 @@ admin.site.register(Tag)
 admin.site.register(Answer)
 admin.site.register(Question)
 admin.site.register(Quiz)
+admin.site.register(Score)
