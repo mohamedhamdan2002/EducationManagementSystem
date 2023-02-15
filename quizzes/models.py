@@ -1,3 +1,6 @@
+from math import ceil
+
+from django.utils import timezone as tz
 from django.db import models
 
 from accounts.models import CustomUser
@@ -48,18 +51,52 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title 
 
-class Score(models.Model):
+
+class Submission(models.Model):
     quiz = models.ForeignKey(
         Quiz,
         on_delete=models.CASCADE,
-        related_name='scores',
+        related_name='submissions',
     )
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        related_name='scores',
+        related_name='submissions',
     )
-    score = models.IntegerField()
+    time = models.DateTimeField(default=tz.now)
 
     def __str__(self):
-        return f'{str(self.user)} ( {str(self.quiz)} ): {self.score}'
+        return f'{str(self.user)} | {str(self.quiz)} | {self.time}'
+
+    def get_total_score(self):
+        score = 0
+        for a in self.items.all():
+            if a.question.true_answer == a.answer:
+                score += 1
+        return score
+
+    def score_to_pass(self):
+        return ceil((len(self.quiz.questions.all()) * 70.0) / 100.0)
+
+    def passed(self):
+        scored = self.get_total_score()
+        return scored >= self.score_to_pass()
+
+
+class AnswerItem(models.Model):
+    submission = models.ForeignKey(
+        Submission,
+        on_delete=models.CASCADE,
+        related_name='items',
+    )
+    question = models.ForeignKey(
+        Question,
+        on_delete=models.CASCADE,
+    )
+    answer = models.ForeignKey(
+        Answer,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return f'{str(self.question)} : {str(self.answer)}'

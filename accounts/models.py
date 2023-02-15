@@ -9,3 +9,7 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    def get_last_submission(self):
+        last_time = max([obj.time for obj in self.submissions.all()])
+        return self.submissions.get(time=last_time)

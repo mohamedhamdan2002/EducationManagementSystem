@@ -1,30 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% for q, a, t in answers %}
+    {% for s in submission.items.all %}
         <ol>
             <div class="card">
                 <div class="card-header">
                     <span class="font-weight-bold">
-                        {{ q }}
+                        {{ s.question.question }}
                     </span> &middot;
                 </div>
                 <div class="card-body">
-                <div>
-                    <span class="font-weight-bold">
-                    {% if a == t %}
-                        <span style="color: green;">{{ t }}</span>
-                    {% else %}
-                        <span style="color: red;">{{ a }}</span><br><br>
-                        <span style="color: green;">{{ t }}</span>
-                    {% endif %}
-                    </span>
-                </div>
-                <br>
+                    {% for a in s.question.answers.all %}
+                        <div>
+                            <span class="font-weight-bold">
+                                {% if a == s.answer %}
+                                    {% if a == s.question.true_answer %}
+                                        <span style="color: green;">{{ a.answer }}</span>
+                                    {% else %}
+                                        <span style="color: red;">{{ a.answer }}</span>
+                                    {% endif %}
+                                {% else %}
+                                    {% if a == s.question.true_answer %}
+                                        <span style="color: green;">{{ a.answer }}</span>
+                                    {% else %}
+                                        <span>{{ a.answer }}</span>
+                                    {% endif %}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <br>
+                    {% endfor %}
                 </div>
             </div>
         </ol>
         <br>
     {% endfor %}
-    <h3>your scored <span style="color:red;">{{ result }}</span> from <span style="color:red;">{{ total }}</span></h3>
+    <h3>your scored <span style="color:red;">{{ score }}</span> from <span style="color:red;">{{ total }}</span></h3>
 {% endblock content %}

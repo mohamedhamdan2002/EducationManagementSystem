@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    name: {{name}}<br>
+    username: {{username}}<br>
+    email: {{email}}<br>
+    date of birth: {{dob}}<br><br><br>
+    <div class="card">
+        <div class="card-header">
+            <span class="font-weight-bold">
+                Submissions:
+            </span> &middot;
+        </div>
+        <div class="card-body">
+            {% for s in submissions %}
+            <div>
+                <span class="font-weight-bold">
+                    Quiz: <a href="{% url 'quizzes:quiz_result' s.quiz.category.id s.quiz.id %}">{{s.quiz.title}}</a>
+                    &emsp; | &emsp; Score: {{s.get_total_score}} 
+                    &emsp; | &emsp; When: {{s.time}}<br>
+                </span>
+            </div>
+            {% endfor %}
+        </div>
+    </div> 
+{% endblock content %}

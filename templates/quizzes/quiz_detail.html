@@ -2,7 +2,8 @@
 
 {% block content %}
     <h4>{{ quiz.title }}</h4><br>
-    <form action="{% url 'quizzes:quiz_result' quiz.category.category quiz.id %}" name="quiz">
+    <form method="POST" action="{% url 'quizzes:quiz_detail' quiz.category.category quiz.id %}" name="quiz">
+    {% csrf_token %}    
     {% for q in quiz.questions.all %}
         <ol>
             <div class="card">

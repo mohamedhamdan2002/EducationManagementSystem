@@ -6,7 +6,8 @@ from .models import (
     Answer,
     Question,
     Quiz,
-    Score,  
+    Submission,
+    AnswerItem,
 )
 
 admin.site.register(Category)
@@ -14,4 +15,5 @@ admin.site.register(Tag)
 admin.site.register(Answer)
 admin.site.register(Question)
 admin.site.register(Quiz)
-admin.site.register(Score)
+admin.site.register(Submission)
+admin.site.register(AnswerItem)
