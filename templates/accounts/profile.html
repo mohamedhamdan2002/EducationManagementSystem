@@ -15,9 +15,10 @@
             {% for s in submissions %}
             <div>
                 <span class="font-weight-bold">
-                    Quiz: <a href="{% url 'quizzes:quiz_result' s.quiz.category.id s.quiz.id %}">{{s.quiz.title}}</a>
+                    Quiz: <a href="{% url 'quizzes:quiz_detail' s.quiz.category.category s.quiz.id %}">{{s.quiz.title}}</a>
                     &emsp; | &emsp; Score: {{s.get_total_score}} 
-                    &emsp; | &emsp; When: {{s.time}}<br>
+                    &emsp; | &emsp; When: {{s.time}}
+                    &emsp; | &emsp; Submission: <a href="{% url 'quizzes:quiz_result' s.quiz.category.id s.quiz.id s.id %}">{{s.id}}</a>
                 </span>
             </div>
             {% endfor %}

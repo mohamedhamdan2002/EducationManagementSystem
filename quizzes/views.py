@@ -23,8 +23,8 @@ def category_list_view(request):
     return render(request, 'quizzes/quiz_list.html', context)
 
 @login_required
-def categorized_quiz_list_view(request, category):
-    category = Category.objects.get(category=category)
+def categorized_quiz_list_view(request, category_id):
+    category = Category.objects.get(category=category_id)
     quiz = category.quizzes.all()
     context = {
         "quizzes": quiz,
@@ -32,22 +32,22 @@ def categorized_quiz_list_view(request, category):
     return render(request, 'quizzes/categorized_quiz_list.html', context)
 
 @login_required
-def quiz_detail_view(request, category, id):
+def quiz_detail_view(request, category_id, quiz_id):
     if request.POST:
-        quiz = Quiz.objects.get(pk=id) 
+        quiz = Quiz.objects.get(pk=quiz_id) 
         obj = Submission.objects.create(quiz=quiz, user=request.user)
         for q in quiz.questions.all():
             ans = request.POST.get(q.question)
             AnswerItem.objects.create(submission=obj, question=q, answer=Answer.objects.get(answer=ans))
-        return redirect(reverse('quizzes:quiz_result', args=(category, id)))
-    quiz = Quiz.objects.get(pk=id)
+        return redirect(reverse('quizzes:quiz_result', args=(category_id, quiz_id, request.user.get_last_submission().id)))
+    quiz = Quiz.objects.get(pk=quiz_id)
     context = {
         "quiz": quiz,
     }
     return render(request, 'quizzes/quiz_detail.html', context)
 
 @login_required
-def quiz_result_view(request, category, id):
+def quiz_result_view(request, category_id, quiz_id, submission_id):
     """
     points = 0
     quiz = Quiz.objects.get(pk=id) 
@@ -67,7 +67,8 @@ def quiz_result_view(request, category, id):
         "total": len(request.GET),
     }
     """
-    submission = request.user.get_last_submission()
+    submission = request.user.submissions.get(id=submission_id)
+    
     context = {
         'submission': submission,
         'score': submission.get_total_score(),

@@ -1,4 +1,5 @@
 from math import ceil
+import uuid
 
 from django.utils import timezone as tz
 from django.db import models
@@ -53,6 +54,11 @@ class Quiz(models.Model):
 
 
 class Submission(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
     quiz = models.ForeignKey(
         Quiz,
         on_delete=models.CASCADE,
