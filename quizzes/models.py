@@ -52,6 +52,9 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title 
 
+    def score_to_pass(self):
+        return ceil((len(self.quiz.questions.all()) * 70.0) / 100.0)
+
 
 class Submission(models.Model):
     id = models.UUIDField(
@@ -81,12 +84,9 @@ class Submission(models.Model):
                 score += 1
         return score
 
-    def score_to_pass(self):
-        return ceil((len(self.quiz.questions.all()) * 70.0) / 100.0)
-
     def passed(self):
         scored = self.get_total_score()
-        return scored >= self.score_to_pass()
+        return scored >= self.quiz.score_to_pass()
 
 
 class AnswerItem(models.Model):
