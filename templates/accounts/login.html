@@ -6,10 +6,13 @@
     {% endif %}
     <form method="POST" action="{% url 'accounts:login' %}" name="login">
         {% csrf_token %}
+        {{ form.as_p }}
+        <!--
         <label for="username">Email/Username: </label>
         <input type="text" name="username" required><br><br>
         <label for="password">Password: </label>
         <input type="password" id="password" name="password" required><br><br>
+        -->
         <button class="btn btn-success ml-2" type="submit" for="login">Login</button>
     </form>
 {% endblock content %}

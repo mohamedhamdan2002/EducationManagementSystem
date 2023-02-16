@@ -4,21 +4,26 @@ from django.contrib.auth.decorators import login_required
 
 from funcs.validators import validate_email
 from .models import CustomUser
+from .forms import LoginForm
 
 def login_view(request):
-    if request.POST:
-        if request.user.is_authenticated:
-            return redirect('pages:home')
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    if request.user.is_authenticated:
+        return redirect('pages:home')
+    form = LoginForm(request.POST or None)
+    context = {
+        'form': form,
+    }
+    if form.is_valid():
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
         if validate_email(username):
             username = CustomUser.objects.get(email__iexact=username).username
         user = authenticate(request, username=username, password=password)
-        if not user:
-            return render(request, 'accounts/login.html', {'error': 'No user with this credintials'})
-        login(request, user)
-        return redirect('pages:home')
-    return render(request, 'accounts/login.html', {})
+        if user:
+            login(request, user)
+            return redirect('pages:home')
+        context['error'] = 'No user with this credintials'
+    return render(request, 'accounts/login.html', context)
 
 @login_required
 def logout_view(request):  
