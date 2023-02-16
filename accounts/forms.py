@@ -23,7 +23,7 @@ class SignupForm(UserCreationForm):
         except:
             obj = None
         if obj:
-            raise forms.ValidationError("user with this email already exists")
+            raise forms.ValidationError("A user with this email already exists")
         return self.cleaned_data.get('email')
 
     #def clean_password(self):

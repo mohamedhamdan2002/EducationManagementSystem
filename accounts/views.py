@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 #from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 
 from funcs.validators import validate_email
 from .models import CustomUser
@@ -28,20 +29,25 @@ def sign_up_view(request):
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('pages:home')
-    form = LoginForm(request.POST or None)
-    context = {
-        'form': form,
-    }
-    if form.is_valid():
-        username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password')
-        if validate_email(username):
-            username = CustomUser.objects.get(email__iexact=username).username
-        user = authenticate(request, username=username, password=password)
-        if user:
+    #form = LoginForm(request.POST or None)
+    context = {}
+    #if form.is_valid():
+    if request.POST:
+        form = AuthenticationForm(request, data=request.POST)
+        #username = form.cleaned_data.get('username')
+        #password = form.cleaned_data.get('password')
+        #if validate_email(username):
+        #    username = CustomUser.objects.get(email__iexact=username).username
+        #user = authenticate(request, username=username, password=password)
+        #if user:
+        #    login(request, user)
+        #    return redirect('pages:home')
+        if form.is_valid():
+            user = form.get_user()
             login(request, user)
             return redirect('pages:home')
         context['error'] = 'No user with this credintials'
+    context['form'] = AuthenticationForm(request)
     return render(request, 'accounts/login.html', context)
 
 @login_required

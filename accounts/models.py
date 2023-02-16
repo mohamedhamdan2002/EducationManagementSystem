@@ -4,8 +4,11 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     date_of_birth = models.DateField()
+    email = models.EmailField(unique=True)
 
-    REQUIRED_FIELDS = ['email', 'date_of_birth']
+    USERNAME_FIELD = 'email'
+
+    REQUIRED_FIELDS = ['username', 'date_of_birth']
 
     def __str__(self):
         return self.username
