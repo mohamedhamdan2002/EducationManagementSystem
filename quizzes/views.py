@@ -45,6 +45,7 @@ def quiz_detail_view(request, category_id, quiz_id):
             AnswerItem.objects.create(submission=submission, question=q, answer=Answer.objects.get(answer=ans))
         return redirect(reverse('quizzes:quiz_result', args=(category_id, quiz_id, request.user.get_last_submission(quiz=quiz).id)))
     quiz = Quiz.objects.get(pk=quiz_id)
+    
     submission = None
     try:
         subm = request.user.get_last_submission(quiz)

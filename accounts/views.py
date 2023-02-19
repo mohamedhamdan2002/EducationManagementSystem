@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 #from django.contrib.auth.hashers import make_password
@@ -15,6 +16,7 @@ def sign_up_view(request):
     }
     if form.is_valid():
         form.save()
+        messages.success(request,"your account has been created! you are now able to log in")
         #CustomUser.objects.create(
         #    first_name=form.cleaned_data.get('first_name'),
         #    last_name=form.cleaned_data.get('last_name'),
