@@ -4,6 +4,13 @@
     {% if error %}
         <h2 style="color: red;">{{ error }}</h2><br>
     {% endif %}
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+        </div>
+    {% endfor %}
+    {% endif %}
     <form method="POST" action="{% url 'accounts:login' %}" name="login">
         {% csrf_token %}
         {{ form.as_p }}
