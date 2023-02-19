@@ -46,6 +46,7 @@ class Quiz(models.Model):
             related_name = 'quizzes',
     )
     difficulty = models.CharField(max_length=100)
+    duration = models.DurationField()
     tags = models.ManyToManyField(Tag)
     questions = models.ManyToManyField(Question)
 
@@ -72,10 +73,11 @@ class Submission(models.Model):
         on_delete=models.CASCADE,
         related_name='submissions',
     )
-    time = models.DateTimeField(default=tz.now)
+    start_time = models.DateTimeField(auto_now_add=True)
+    finished = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{str(self.user)} | {str(self.quiz)} | {self.time}'
+        return f'{str(self.user)} | {str(self.quiz)} | {self.start_time}'
 
     def get_total_score(self):
         score = 0
@@ -87,6 +89,13 @@ class Submission(models.Model):
     def passed(self):
         scored = self.get_total_score()
         return scored >= self.quiz.score_to_pass()
+
+    def end_time(self):
+        return self.start_time + self.quiz.duration
+
+    def ended(self):
+        return tz.now() > self.end_time()
+
 
 
 class AnswerItem(models.Model):

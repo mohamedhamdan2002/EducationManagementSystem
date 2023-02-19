@@ -35,14 +35,29 @@ def categorized_quiz_list_view(request, category_id):
 def quiz_detail_view(request, category_id, quiz_id):
     if request.POST:
         quiz = Quiz.objects.get(pk=quiz_id) 
-        obj = Submission.objects.create(quiz=quiz, user=request.user)
+        submission = request.user.get_last_submission(quiz)
+        submission.finished = True
+        submission.save()
+        if submission.ended():
+            return render(request, 'quizzes/quiz_result.html', {'error': 'Time is up'})
         for q in quiz.questions.all():
             ans = request.POST.get(q.question)
-            AnswerItem.objects.create(submission=obj, question=q, answer=Answer.objects.get(answer=ans))
-        return redirect(reverse('quizzes:quiz_result', args=(category_id, quiz_id, request.user.get_last_submission().id)))
+            AnswerItem.objects.create(submission=submission, question=q, answer=Answer.objects.get(answer=ans))
+        return redirect(reverse('quizzes:quiz_result', args=(category_id, quiz_id, request.user.get_last_submission(quiz=quiz).id)))
     quiz = Quiz.objects.get(pk=quiz_id)
+    submission = None
+    try:
+        subm = request.user.get_last_submission(quiz)
+        if subm.finished or subm.ended():
+            submission  = Submission.objects.create(quiz=quiz, user=request.user) 
+        else:
+            submission = subm
+    except:
+        submission  = Submission.objects.create(quiz=quiz, user=request.user)
     context = {
         "quiz": quiz,
+        "start": submission.start_time,
+        "end": submission.end_time(),
     }
     return render(request, 'quizzes/quiz_detail.html', context)
 
@@ -68,7 +83,7 @@ def quiz_result_view(request, category_id, quiz_id, submission_id):
     }
     """
     submission = request.user.submissions.get(id=submission_id)
-    
+
     context = {
         'submission': submission,
         'score': submission.get_total_score(),
