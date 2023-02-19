@@ -16,7 +16,7 @@
                     <a href="{% url 'quizzes:quiz_detail' q.category q.id %}">{{ q.title }}</a>
                 </span> &middot;
                 <span class="text-muted">
-                    category: {{ q.category }} | difficulty: {{ q.difficulty }}
+                    &emsp; category: {{ q.category }} &emsp; | &emsp; difficulty: {{ q.difficulty }} &emsp; | &emsp; duration {{ q.duration }}
                 </span>
             </div>
             <div class="card-body">

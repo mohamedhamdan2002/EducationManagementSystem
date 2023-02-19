@@ -2,6 +2,10 @@
 
 {% block content %}
     <h4>{{ quiz.title }}</h4><br>
+    <span class="font-weight-bold">
+        Started at: {{ start }} &emsp; | &emsp; Ends at: {{ end }}
+    </span>
+    <br><br>
     <form method="POST" action="{% url 'quizzes:quiz_detail' quiz.category.category quiz.id %}" name="quiz">
     {% csrf_token %}    
     {% for q in quiz.questions.all %}
@@ -16,7 +20,7 @@
                     {% for a in q.answers.all %}
                         <div>
                             <span class="font-weight-bold">
-                                <input type="radio" name="{{ q.question }}" value="{{ a.answer }}">
+                                <input type="radio" name="{{ q.question }}" value="{{ a.answer }}" required>
                                 <label for="{{ q.qestion }}">{{ a.answer }}</label>
                             </span>
                         </div>

@@ -1,39 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% for s in submission.items.all %}
-        <ol>
-            <div class="card">
-                <div class="card-header">
-                    <span class="font-weight-bold">
-                        {{ s.question.question }}
-                    </span> &middot;
-                </div>
-                <div class="card-body">
-                    {% for a in s.question.answers.all %}
-                        <div>
-                            <span class="font-weight-bold">
-                                {% if a == s.answer %}
-                                    {% if a == s.question.true_answer %}
-                                        <span style="color: green;">{{ a.answer }}</span>
+    {% if error %}
+        <h4 style="color: red;">{{ error }}</h4>
+    {% else %}
+        {% for s in submission.items.all %}
+            <ol>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="font-weight-bold">
+                            {{ s.question.question }}
+                        </span> &middot;
+                    </div>
+                    <div class="card-body">
+                        {% for a in s.question.answers.all %}
+                            <div>
+                                <span class="font-weight-bold">
+                                    {% if a == s.answer %}
+                                        {% if a == s.question.true_answer %}
+                                            <span style="color: green;">{{ a.answer }}</span>
+                                        {% else %}
+                                            <span style="color: red;">{{ a.answer }}</span>
+                                        {% endif %}
                                     {% else %}
-                                        <span style="color: red;">{{ a.answer }}</span>
+                                        {% if a == s.question.true_answer %}
+                                            <span style="color: green;">{{ a.answer }}</span>
+                                        {% else %}
+                                            <span>{{ a.answer }}</span>
+                                        {% endif %}
                                     {% endif %}
-                                {% else %}
-                                    {% if a == s.question.true_answer %}
-                                        <span style="color: green;">{{ a.answer }}</span>
-                                    {% else %}
-                                        <span>{{ a.answer }}</span>
-                                    {% endif %}
-                                {% endif %}
-                            </span>
-                        </div>
-                        <br>
-                    {% endfor %}
+                                </span>
+                            </div>
+                            <br>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-        </ol>
-        <br>
-    {% endfor %}
-    <h3>your scored <span style="color:red;">{{ score }}</span> from <span style="color:red;">{{ total }}</span></h3>
+            </ol>
+            <br>
+        {% endfor %}
+        <h3>your scored <span style="color:red;">{{ score }}</span> from <span style="color:red;">{{ total }}</span></h3>
+    {% endif %}
 {% endblock content %}

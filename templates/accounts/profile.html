@@ -17,7 +17,7 @@
                 <span class="font-weight-bold">
                     Quiz: <a href="{% url 'quizzes:quiz_detail' s.quiz.category.category s.quiz.id %}">{{s.quiz.title}}</a>
                     &emsp; | &emsp; Score: {{s.get_total_score}} 
-                    &emsp; | &emsp; When: {{s.time}}
+                    &emsp; | &emsp; When: {{s.start_time}}
                     &emsp; | &emsp; Submission: <a href="{% url 'quizzes:quiz_result' s.quiz.category.category s.quiz.id s.id %}">{{s.id}}</a>
                 </span>
             </div>

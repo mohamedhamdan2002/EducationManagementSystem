@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if account_created %}
-        <h2 style="color:green;">{{ account_created }}</h2>
-    {% endif %}
     {% if error %}
         <h2 style="color: red;">{{ error }}</h2><br>
     {% endif %}
