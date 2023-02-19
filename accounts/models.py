@@ -13,6 +13,9 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-    def get_last_submission(self):
-        last_time = max([obj.time for obj in self.submissions.all()])
-        return self.submissions.get(time=last_time)
+    def get_last_submission(self, quiz = None):
+        if quiz:
+            last_time = max([obj.start_time for obj in self.submissions.filter(quiz=quiz)])
+        else:
+            last_time = max([obj.start_time for obj in self.submissions.all()])
+        return self.submissions.get(start_time=last_time)

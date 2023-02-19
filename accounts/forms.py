@@ -4,7 +4,7 @@ from .models import CustomUser
 from django.contrib.auth.forms import UserCreationForm
 
 class LoginForm(forms.Form):
-    username = forms.CharField()
+    Email = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
 
 class SignupForm(UserCreationForm):

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 #from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
@@ -23,7 +23,7 @@ def sign_up_view(request):
         #    username=form.cleaned_data.get('username'),
         #    password=make_password(form.cleaned_data.get('password1')),
         #)
-        return render(request, 'accounts/login.html', {'account_created': 'Successfully created', 'form': LoginForm()})
+        return redirect('accounts:login')
     return render(request, 'accounts/signup.html', context)
 
 def login_view(request):
