@@ -10,7 +10,9 @@ from .models import (
     AnswerItem,
 )
 
-
+class TagInline(admin.TabularInline):
+    model=Quiz.tags.through
+    extra=0
 
 class AnswerInline(admin.TabularInline):
     model=Question.answers.through
@@ -26,8 +28,8 @@ class QuestionAdmin(admin.ModelAdmin):
     exclude=['answers']
 @admin.register(Quiz)
 class QuizAdmin(admin.ModelAdmin):
-    inlines=[QuestionInline]
-    exclude=['questions']
+    inlines=[QuestionInline,TagInline]
+    exclude=['questions','tags']
     list_display=['title','category','difficulty','duration']
     readonly_fields=['score_to_pass']
 
