@@ -2,3 +2,5 @@ Pipfile
 Pipfile.lock
 .env
 .venv
+db.sqlite3
+__pycache__

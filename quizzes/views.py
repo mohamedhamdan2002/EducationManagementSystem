@@ -3,6 +3,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
+from django.forms.models import modelformset_factory,inlineformset_factory
+
+from .form import QuizForm,QuetionForm,TagForm,TagForm
+
 from .models import (
     Category, 
     Quiz, 
@@ -11,6 +15,26 @@ from .models import (
     Submission,
     AnswerItem,
 )
+
+
+@login_required
+def create_new_quiz(request):
+    quiz_form=QuizForm(request.POST or None)
+    QuetionFromset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
+    formset=QuetionFromset(request.POST or None)
+    context={
+        'quiz_form':quiz_form,
+        'formset':formset,
+    }
+    if all([quiz_form.is_valid(),formset.is_valid()]):
+        parent=quiz_form.save(commit=False)
+        parent.save()
+        for form in formset:
+            qs=Question.objects.get(id=form.cleaned_data['question'].id)
+            parent.questions.add(qs)
+        return redirect(parent.get_absolute_url())
+    return render(request,'quizzes/create.html',context)
+
 
 @login_required
 def category_list_view(request):
