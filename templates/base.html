@@ -13,7 +13,11 @@
 	<body>
 		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 			<div class="container-fluid">
+			{%if request.user.is_staff%}
+				<a class="navbar-brand" href="{% url 'pages:staff-home' %}">Education Management System</a>
+			{%else%}
 				<a class="navbar-brand" href="{% url 'pages:home' %}">Education Management System</a>
+			{% endif%}
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-targ\et="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>

@@ -9,12 +9,14 @@ from .views import (
     admin_create_quiz,
     admin_update_quiz,
     admin_quiz_detail_view,
+    admin_questions_list_view,
 )
 
 app_name = 'quizzes'
 
 urlpatterns = [
     path('', category_list_view, name='quiz_list'),
+    path('questions',admin_questions_list_view,name='admin-questions-list'),
     path('add-quize',admin_create_quiz,name='admin-quiz-create'),
     path('edit-quize/<int:quiz_id>/',admin_update_quiz,name='admin-quiz-update'),
     path('quiz-detail/<int:quiz_id>',admin_quiz_detail_view,name='admin-quiz-detail'),

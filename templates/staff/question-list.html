@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    <h4>Questions: </h4>
+    <ul>
+    {% for q in questions%}
+        <li><a href="">{{ q.question }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock content %}

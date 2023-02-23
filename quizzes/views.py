@@ -92,7 +92,46 @@ def admin_quiz_detail_view(request,quiz_id=None):
     }
     return render(request,"staff/quiz-detail.html",context)
 
+
+
+# @login_required
+# @admin_only
+# def admin_create_quiz(request):
+#     quiz_form=QuizForm(request.POST or None)
+#     QuetionFromset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
+#     TageFromset=inlineformset_factory(Quiz,Quiz.tags.through,exclude=['tags'],extra=0)
+#     Tformset=TageFromset(request.POST or None) # T ->tag
+#     formset=QuetionFromset(request.POST or None)
+#     context={
+#         'quiz_form':quiz_form,
+#         'formset':formset,
+#         'Tformset':Tformset
+#     }
+#     if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
+#         quiz=quiz_form.save(commit=False)
+#         quiz.save()
+#         for form in formset:
+#             qs=Question.objects.get(id=form.cleaned_data['question'].id)
+#             quiz.questions.add(qs)
+#         for form in Tformset:
+#             qs=Tag.objects.get(id=form.cleaned_data['tag'].id)
+#             quiz.tags.add(qs)
+#         return redirect(quiz.get_absolute_url())
+#     return render(request,'staff/update-create.html',context)
+
+
+
+@login_required
+@admin_only
+def admin_questions_list_view(request):
+    questions=Question.objects.all()
+    context={
+        "questions":questions,
+    }
+    return render(request,"staff/question-list.html",context)
+
   
+
 
 @login_required
 def category_list_view(request):
