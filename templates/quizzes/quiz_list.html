@@ -12,7 +12,11 @@
         <div class="card">
             <div class="card-header">
                 <span class="font-weight-bold">
+                {% if request.user.is_staff %}
+                    <a href="{% url 'quizzes:admin-quiz-detail' q.id %}">{{ q.title }}</a>
+                {% else %}
                     <a href="{% url 'quizzes:quiz_detail' q.category q.id %}">{{ q.title }}</a>
+                {% endif %}
                 </span> &middot;
                 <span class="text-muted">
                     &emsp; category: {{ q.category }} &emsp; | &emsp; difficulty: {{ q.difficulty }} &emsp; | &emsp; duration {{ q.duration }}

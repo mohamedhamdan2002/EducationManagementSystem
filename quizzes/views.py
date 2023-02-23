@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.forms.models import modelformset_factory,inlineformset_factory
 
 from .form import QuizForm,QuetionForm,TagForm,TagForm
+from accounts.decorators import admin_only
 
 from .models import (
     Category, 
@@ -19,6 +20,7 @@ from .models import (
 )
 
 @login_required
+@admin_only
 def admin_create_quiz(request):
     quiz_form=QuizForm(request.POST or None)
     QuetionFromset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
@@ -44,6 +46,7 @@ def admin_create_quiz(request):
 
 
 @login_required
+@admin_only
 def admin_update_quiz(request,quiz_id=None):
     quiz_obj=get_object_or_404(Quiz,id=quiz_id)
     quiz_form=QuizForm(request.POST or None,instance=quiz_obj)
@@ -81,6 +84,7 @@ def admin_update_quiz(request,quiz_id=None):
 
 
 @login_required
+@admin_only
 def admin_quiz_detail_view(request,quiz_id=None):
     quiz=get_object_or_404(Quiz,id=quiz_id)
     context={
@@ -88,10 +92,7 @@ def admin_quiz_detail_view(request,quiz_id=None):
     }
     return render(request,"staff/quiz-detail.html",context)
 
-
-
-
-
+  
 
 @login_required
 def category_list_view(request):
