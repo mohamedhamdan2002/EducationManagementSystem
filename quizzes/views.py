@@ -4,9 +4,8 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
-from django.forms.models import modelformset_factory,inlineformset_factory
 
-from .form import QuizForm,QuetionForm,TagForm,TagForm
+from .form import QuizForm,QuestionForm,QuestionFromset,TagFromset,AnswerFormset
 from accounts.decorators import admin_only
 
 from .models import (
@@ -23,10 +22,8 @@ from .models import (
 @admin_only
 def admin_create_quiz(request):
     quiz_form=QuizForm(request.POST or None)
-    QuetionFromset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
-    TageFromset=inlineformset_factory(Quiz,Quiz.tags.through,exclude=['tags'],extra=0)
-    Tformset=TageFromset(request.POST or None) # T ->tag
-    formset=QuetionFromset(request.POST or None)
+    Tformset=TagFromset(request.POST or None) # T ->tag
+    formset=QuestionFromset(request.POST or None)
     context={
         'quiz_form':quiz_form,
         'formset':formset,
@@ -49,10 +46,8 @@ def admin_create_quiz(request):
 def admin_update_quiz(request,quiz_id=None):
     quiz_obj=get_object_or_404(Quiz,id=quiz_id)
     quiz_form=QuizForm(request.POST or None,instance=quiz_obj)
-    QuetionFormset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
-    formset=QuetionFormset(request.POST or None,instance=quiz_obj)
-    TageFromset=inlineformset_factory(Quiz,Quiz.tags.through,exclude=['tags'],extra=0)
-    Tformset=TageFromset(request.POST or None,instance=quiz_obj) # T ->tag
+    formset=QuestionFromset(request.POST or None,instance=quiz_obj)
+    Tformset=TagFromset(request.POST or None,instance=quiz_obj) # T ->tag
     context={
         'quiz_form':quiz_form,
         'formset':formset,
@@ -94,8 +89,7 @@ def admin_quiz_detail_view(request,quiz_id=None):
 @login_required
 @admin_only
 def admin_create_questions(request):
-    question_form=QuetionForm(request.POST or None)
-    AnswerFormset=inlineformset_factory(Question,Question.answers.through,exclude=['answers'],extra=0)
+    question_form=QuestionForm(request.POST or None)
     formset=AnswerFormset(request.POST or None)
     context={
         'question_form':question_form,

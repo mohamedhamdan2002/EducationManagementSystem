@@ -1,8 +1,11 @@
 from django import forms
-
+from django.forms.models import inlineformset_factory
 from .models import Quiz,Question,Answer,Tag,Category
 
 
+QuestionFromset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
+TagFromset=inlineformset_factory(Quiz,Quiz.tags.through,exclude=['tags'],extra=0)
+AnswerFormset=inlineformset_factory(Question,Question.answers.through,exclude=['answers'],extra=0)
 class QuizForm(forms.ModelForm):
     class Meta:
         model=Quiz
@@ -12,7 +15,7 @@ class QuizForm(forms.ModelForm):
             'difficulty',
             'duration',
         ]
-class QuetionForm(forms.ModelForm):
+class QuestionForm(forms.ModelForm):
     class Meta:
         model=Question
         fields=[
