@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 from django.forms.models import modelformset_factory,inlineformset_factory
 
@@ -11,29 +12,85 @@ from .models import (
     Category, 
     Quiz, 
     Question,
+    Tag,
     Answer,
     Submission,
     AnswerItem,
 )
 
-
 @login_required
-def create_new_quiz(request):
+def admin_create_quiz(request):
     quiz_form=QuizForm(request.POST or None)
     QuetionFromset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
+    TageFromset=inlineformset_factory(Quiz,Quiz.tags.through,exclude=['tags'],extra=0)
+    Tformset=TageFromset(request.POST or None) # T ->tag
     formset=QuetionFromset(request.POST or None)
     context={
         'quiz_form':quiz_form,
         'formset':formset,
+        'Tformset':Tformset
     }
-    if all([quiz_form.is_valid(),formset.is_valid()]):
-        parent=quiz_form.save(commit=False)
-        parent.save()
+    if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
+        quiz=quiz_form.save(commit=False)
+        quiz.save()
         for form in formset:
             qs=Question.objects.get(id=form.cleaned_data['question'].id)
-            parent.questions.add(qs)
-        return redirect(parent.get_absolute_url())
-    return render(request,'quizzes/create.html',context)
+            quiz.questions.add(qs)
+        for form in Tformset:
+            qs=Tag.objects.get(id=form.cleaned_data['tag'].id)
+            quiz.tags.add(qs)
+        return redirect(quiz.get_absolute_url())
+    return render(request,'staff/update-create.html',context)
+
+
+@login_required
+def admin_update_quiz(request,quiz_id=None):
+    quiz_obj=get_object_or_404(Quiz,id=quiz_id)
+    quiz_form=QuizForm(request.POST or None,instance=quiz_obj)
+    QuetionFromset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
+    formset=QuetionFromset(request.POST or None,instance=quiz_obj)
+    TageFromset=inlineformset_factory(Quiz,Quiz.tags.through,exclude=['tags'],extra=0)
+    Tformset=TageFromset(request.POST or None,instance=quiz_obj) # T ->tag
+    context={
+        'quiz_form':quiz_form,
+        'formset':formset,
+        'Tformset':Tformset,
+    }
+    if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
+        quiz=quiz_form.save(commit=False)
+        quiz.save()
+        print(formset.cleaned_data)
+        for form in formset:
+            q=Question.objects.get(id=form.cleaned_data['question'].id)
+            if form.cleaned_data['DELETE']:
+                quiz.questions.remove(q)
+            else:
+                qs=quiz.questions.all()
+                if q not in qs:
+                    quiz.questions.add(q)
+        for form in Tformset:
+            q=Tag.objects.get(id=form.cleaned_data['tag'].id)
+            if form.cleaned_data['DELETE']:
+                quiz.tags.remove(q)
+            else:
+                qs=quiz.tags.all()
+                if q not in qs:
+                    quiz.tags.add(q)            
+        return redirect(quiz.get_absolute_url())
+    return render(request,'staff/update-create.html',context)
+
+
+@login_required
+def admin_quiz_detail_view(request,quiz_id=None):
+    quiz=get_object_or_404(Quiz,id=quiz_id)
+    context={
+        "quiz":quiz,
+    }
+    return render(request,"staff/quiz-detail.html",context)
+
+
+
+
 
 
 @login_required

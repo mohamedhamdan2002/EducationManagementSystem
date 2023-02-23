@@ -11,7 +11,6 @@ class QuizForm(forms.ModelForm):
             'category',
             'difficulty',
             'duration',
-            'tags',
         ]
 class QuetionForm(forms.ModelForm):
     class Meta:

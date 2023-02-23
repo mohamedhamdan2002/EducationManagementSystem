@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .quetion-form{
+        border-bottom: 1px solid black;
+    }
+    .hidden{
+        display: none
+    }
+</style>
+    {% if message %}
+        <h2>{{message}}</h2>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <h2>Quiz</h2>
+        {{ quiz_form.as_p }}
+            <br><br> 
+        {% if formset %}
+            <h3>Quiz-Questions</h3>
+            <div id='questions-form-list'>
+                {{formset.management_form}}
+                {% for form in formset %}
+                 <div class='quetions-form'>
+                    {{ form.as_p }}
+                 </div>
+                 {% endfor %}
+            </div>
+             <div id='quiz-empty-form' class='hidden' >{{formset.empty_form.as_p}}</div>
+            <button id='add-more-question' class="btn btn-outline-success ml-2"  type='button'>AddQuetion</button>
+        {% endif %}
+        <br><br>
+        {% if Tformset %}
+            <h3>Quiz-Tags</h3>
+            <div id='tags-form-list'>
+                {{Tformset.management_form}}
+                {% for form in Tformset %}
+                 <div class='tags-form'>
+                    {{ form.as_p }}
+                 </div>
+                 {% endfor %}
+            </div>
+             <div id='tags-empty-form' class='hidden' >{{Tformset.empty_form.as_p}}</div>
+            <button id='add-more-tags' class="btn btn-outline-success ml-2"  type='button'>AddTags</button>
+        {% endif %}
+       <br></br>
+        <button class="btn btn-success ml-2" type="submit">save</button>
+    </form>
+<script>
+    //add more questions
+    const addMoreQuestion=document.getElementById('add-more-question')
+    const totalNewFroms=document.getElementById('id_Quiz_questions-TOTAL_FORMS')
+    addMoreQuestion.addEventListener('click',add_new_question)
+
+    function add_new_question(event){
+        if(event){
+            event.preventDefault()
+        }
+
+        const currentQuestionFroms=document.getElementsByClassName('quetions-form')
+        const currentFormCount=currentQuestionFroms.length
+        const formCopyTarget=document.getElementById('questions-form-list')
+        const copyEmptyQuestionFormEl=document.getElementById('quiz-empty-form').cloneNode(true)
+        copyEmptyQuestionFormEl.setAttribute('class','quetions-form')
+        copyEmptyQuestionFormEl.setAttribute('id',`form-${currentFormCount}`)
+        const regex=new RegExp('__prefix__','g')
+        copyEmptyQuestionFormEl.innerHTML=copyEmptyQuestionFormEl.innerHTML.replace(regex,currentFormCount)
+        totalNewFroms.setAttribute('value',currentFormCount+1)
+        formCopyTarget.append(copyEmptyQuestionFormEl)
+    }
+
+    //add more tags
+    const addMoreTags=document.getElementById('add-more-tags')
+    const totalNewTagsFroms=document.getElementById('id_Quiz_tags-TOTAL_FORMS')
+    addMoreTags.addEventListener('click',add_new_tags)
+
+    function add_new_tags(event){
+        if(event){
+            event.preventDefault()
+        }
+
+        const currentTagsFroms=document.getElementsByClassName('tags-form')
+        const currentTagsFormCount=currentTagsFroms.length
+        const TagformCopyTarget=document.getElementById('tags-form-list')
+        const copyEmptyTagFormEl=document.getElementById('tags-empty-form').cloneNode(true)
+        copyEmptyTagFormEl.setAttribute('class','tags-form')
+        copyEmptyTagFormEl.setAttribute('id',`form-${currentTagsFormCount}`)
+        const regex=new RegExp('__prefix__','g')
+        copyEmptyTagFormEl.innerHTML=copyEmptyTagFormEl.innerHTML.replace(regex,currentTagsFormCount)
+        totalNewTagsFroms.setAttribute('value',currentTagsFormCount+1)
+        TagformCopyTarget.append(copyEmptyTagFormEl)
+    }
+
+
+</script>
+
+
+{% endblock content %}
