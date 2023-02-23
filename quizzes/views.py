@@ -33,8 +33,7 @@ def admin_create_quiz(request):
         'Tformset':Tformset
     }
     if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
-        quiz=quiz_form.save(commit=False)
-        quiz.save()
+        quiz=quiz_form.save()
         for form in formset:
             qs=Question.objects.get(id=form.cleaned_data['question'].id)
             quiz.questions.add(qs)
@@ -50,8 +49,8 @@ def admin_create_quiz(request):
 def admin_update_quiz(request,quiz_id=None):
     quiz_obj=get_object_or_404(Quiz,id=quiz_id)
     quiz_form=QuizForm(request.POST or None,instance=quiz_obj)
-    QuetionFromset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
-    formset=QuetionFromset(request.POST or None,instance=quiz_obj)
+    QuetionFormset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
+    formset=QuetionFormset(request.POST or None,instance=quiz_obj)
     TageFromset=inlineformset_factory(Quiz,Quiz.tags.through,exclude=['tags'],extra=0)
     Tformset=TageFromset(request.POST or None,instance=quiz_obj) # T ->tag
     context={
@@ -60,9 +59,7 @@ def admin_update_quiz(request,quiz_id=None):
         'Tformset':Tformset,
     }
     if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
-        quiz=quiz_form.save(commit=False)
-        quiz.save()
-        print(formset.cleaned_data)
+        quiz=quiz_form.save()
         for form in formset:
             q=Question.objects.get(id=form.cleaned_data['question'].id)
             if form.cleaned_data['DELETE']:
@@ -94,30 +91,23 @@ def admin_quiz_detail_view(request,quiz_id=None):
 
 
 
-# @login_required
-# @admin_only
-# def admin_create_quiz(request):
-#     quiz_form=QuizForm(request.POST or None)
-#     QuetionFromset=inlineformset_factory(Quiz,Quiz.questions.through,exclude=['questions'],extra=0)
-#     TageFromset=inlineformset_factory(Quiz,Quiz.tags.through,exclude=['tags'],extra=0)
-#     Tformset=TageFromset(request.POST or None) # T ->tag
-#     formset=QuetionFromset(request.POST or None)
-#     context={
-#         'quiz_form':quiz_form,
-#         'formset':formset,
-#         'Tformset':Tformset
-#     }
-#     if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
-#         quiz=quiz_form.save(commit=False)
-#         quiz.save()
-#         for form in formset:
-#             qs=Question.objects.get(id=form.cleaned_data['question'].id)
-#             quiz.questions.add(qs)
-#         for form in Tformset:
-#             qs=Tag.objects.get(id=form.cleaned_data['tag'].id)
-#             quiz.tags.add(qs)
-#         return redirect(quiz.get_absolute_url())
-#     return render(request,'staff/update-create.html',context)
+@login_required
+@admin_only
+def admin_create_questions(request):
+    question_form=QuetionForm(request.POST or None)
+    AnswerFormset=inlineformset_factory(Question,Question.answers.through,exclude=['answers'],extra=0)
+    formset=AnswerFormset(request.POST or None)
+    context={
+        'question_form':question_form,
+        'formset':formset,
+    }
+    if all([question_form.is_valid(),formset.is_valid()]):
+        question=question_form.save()
+        for form in formset:
+            qs=Answer.objects.get(id=form.cleaned_data['answer'].id)
+            question.answers.add(qs)
+        return redirect('quizzes:admin-questions-list')
+    return render(request,'staff/question-create.html',context)
 
 
 

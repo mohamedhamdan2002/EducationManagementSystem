@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <h4>Questions: </h4>
+    <li><a href="{% url 'quizzes:admin-question-create'%}">Add-Question</a></li>
     <ul>
     {% for q in questions%}
         <li><a href="">{{ q.question }}</a></li>

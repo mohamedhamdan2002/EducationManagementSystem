@@ -17,7 +17,6 @@ class QuetionForm(forms.ModelForm):
         model=Question
         fields=[
             'question',
-            'answers',
             'true_answer',
             'q_type',
         ]
