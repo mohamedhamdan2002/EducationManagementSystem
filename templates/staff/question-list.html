@@ -4,7 +4,7 @@
     <li><a href="{% url 'quizzes:admin-question-create'%}">Add-Question</a></li>
     <ul>
     {% for q in questions%}
-        <li><a href="">{{ q.question }}</a></li>
+        <li><a href="{% url 'quizzes:admin-question-detail' q.id %}">{{ q.question }}</a></li>
     {% endfor %}
     </ul>
 {% endblock content %}

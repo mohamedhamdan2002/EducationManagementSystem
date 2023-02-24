@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 #from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import Group
 
 from funcs.validators import validate_email
 from .models import CustomUser
@@ -15,7 +16,7 @@ def sign_up_view(request):
         'form': form,
     }
     if form.is_valid():
-        form.save()
+        user=form.save()
         messages.success(request,"your account has been created! you are now able to log in")
         #CustomUser.objects.create(
         #    first_name=form.cleaned_data.get('first_name'),
@@ -25,6 +26,8 @@ def sign_up_view(request):
         #    username=form.cleaned_data.get('username'),
         #    password=make_password(form.cleaned_data.get('password1')),
         #)
+        group=Group.objects.get(name='students')
+        group.add(user)
         return redirect('accounts:login')
     return render(request, 'accounts/signup.html', context)
 

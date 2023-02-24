@@ -55,6 +55,7 @@ def admin_update_quiz(request,quiz_id=None):
     }
     if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
         quiz=quiz_form.save()
+        print(formset.cleaned_data)
         for form in formset:
             q=Question.objects.get(id=form.cleaned_data['question'].id)
             if form.cleaned_data['DELETE']:
@@ -114,7 +115,16 @@ def admin_questions_list_view(request):
     }
     return render(request,"staff/question-list.html",context)
 
-  
+@login_required
+@admin_only
+def admin_َquestion_detail_view(request,question_id=None):
+    question=get_object_or_404(Question,id=question_id)
+    context={
+        "question":question,
+    }
+    return render(request,"staff/question-detail.html",context)
+
+
 
 
 @login_required
@@ -193,7 +203,7 @@ def quiz_result_view(request, category_id, quiz_id, submission_id):
     context = {
         'submission': submission,
         'score': submission.get_total_score(),
-        'total': len(submission.quiz.questions.all()),
+        'total': submission.quiz.questions.all().count(),
     }
 
     return render(request, 'quizzes/quiz_result.html', context)
