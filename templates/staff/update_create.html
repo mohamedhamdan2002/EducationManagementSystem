@@ -11,7 +11,11 @@
     {% if message %}
         <h2>{{message}}</h2>
     {% endif %}
-    <form method="POST" action="{% url 'quizzes:quiz_list' %}">
+    {% if quiz %}
+    <form method="POST" action="{% url 'quizzes:edit_quiz' quiz.id %}">
+    {% else %}
+    <form method="POST" action="{% url 'quizzes:create_quiz' %}">
+    {% endif %}
         {% csrf_token %}
         <h2>Quiz</h2>
         {{ quiz_form.as_p }}
