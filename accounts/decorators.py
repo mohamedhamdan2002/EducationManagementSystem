@@ -11,6 +11,6 @@ def admin_only(view_func):
 
         if group == 'students':
             return redirect('pages:home')
-        if group == 'staffs':
+        if group == 'staff':
             return view_func(request,*args,**kwargs)
     return wrapper_func
