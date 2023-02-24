@@ -53,8 +53,7 @@ class Quiz(models.Model):
     def __str__(self):
         return self.title 
 
-    # def get_absolute_url(self):
-        return reverse('quizzes:quiz_detail',kwargs={'category_id':self.category,'quiz_id':self.id})
+
     def get_absolute_url(self):
         return reverse('quizzes:admin-quiz-detail',kwargs={'quiz_id':self.id})
 
