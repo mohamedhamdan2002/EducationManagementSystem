@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h4>Question-detail-veiw</h4>
+    <div class="card">      
+    <div class="card-header">
+        <span class="font-weight-bold">
+            {{question.question}}
+        </span> &middot;
+        </div>
+    </div>
+    <div>
+    <p>Answers:</p>
+    {% for ans in question.answers.all %}
+        <ul>
+            <li>{{ans}}</li>               
+        </ul>
+    {% endfor %}
+    <span class="font-weight-bold">
+            <p>True Answer: {{question.true_answer}}</p>
+    </span>
+    </div>
+
+{% endblock content %}

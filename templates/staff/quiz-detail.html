@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h4>{{ quiz.title }}:</h4><br>
+    <span class="font-weight-bold">
+       <p> Duration: {{quiz.duration}}</p>
+    </span>
+    <p>Category: {{quiz.category}}</p>
+    <p>Difficulty: {{quiz.difficulty}}</p>
+    <br><br>  
+    <h4>Quiz-Questions</h4>
+    {% for q in quiz.questions.all %}
+        <ol>
+            <div class="card">
+                <div class="card-header">
+                    <span class="font-weight-bold">
+                        {{ q.question }}
+                    </span> &middot;
+                </div>
+                <div class="card-body">
+                        <div>
+                            <span class="font-weight-bold">
+                                <p>True Answer: {{q.true_answer}}</p>
+                            </span>
+                        </div>
+                        <br>
+                </div>
+            </div>
+        </ol>
+        <br>
+    {% endfor %}
+
+{% endblock content %}
