@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.urls import reverse
+#from django.http import HttpResponse
+#from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from accounts.decorators import admin_only
 

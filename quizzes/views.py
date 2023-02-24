@@ -38,7 +38,7 @@ def admin_create_quiz(request):
             qs=Tag.objects.get(id=form.cleaned_data['tag'].id)
             quiz.tags.add(qs)
         return redirect(quiz.get_absolute_url())
-    return render(request,'staff/update-create.html',context)
+    return render(request,'staff/update_create.html',context)
 
 
 @login_required
@@ -49,6 +49,7 @@ def admin_update_quiz(request,quiz_id=None):
     formset=QuestionFromset(request.POST or None,instance=quiz_obj)
     Tformset=TagFromset(request.POST or None,instance=quiz_obj) # T ->tag
     context={
+        'quiz': quiz_obj,
         'quiz_form':quiz_form,
         'formset':formset,
         'Tformset':Tformset,
@@ -73,7 +74,7 @@ def admin_update_quiz(request,quiz_id=None):
                 if q not in qs:
                     quiz.tags.add(q)            
         return redirect(quiz.get_absolute_url())
-    return render(request,'staff/update-create.html',context)
+    return render(request,'staff/update_create.html',context)
 
 
 @login_required
@@ -83,7 +84,7 @@ def admin_quiz_detail_view(request,quiz_id=None):
     context={
         "quiz":quiz,
     }
-    return render(request,"staff/quiz-detail.html",context)
+    return render(request,"staff/quiz_detail.html",context)
 
 
 
@@ -101,8 +102,8 @@ def admin_create_questions(request):
         for form in formset:
             qs=Answer.objects.get(id=form.cleaned_data['answer'].id)
             question.answers.add(qs)
-        return redirect('quizzes:admin-questions-list')
-    return render(request,'staff/question-create.html',context)
+        return redirect('quizzes:question_list')
+    return render(request,'staff/question_create.html',context)
 
 
 
@@ -113,7 +114,7 @@ def admin_questions_list_view(request):
     context={
         "questions":questions,
     }
-    return render(request,"staff/question-list.html",context)
+    return render(request,"staff/question_list.html",context)
 
 @login_required
 @admin_only
@@ -122,7 +123,7 @@ def admin_َquestion_detail_view(request,question_id=None):
     context={
         "question":question,
     }
-    return render(request,"staff/question-detail.html",context)
+    return render(request,"staff/question_detail.html",context)
 
 
 
@@ -144,7 +145,7 @@ def categorized_quiz_list_view(request, category_id):
     context = {
         "quizzes": quiz,
     }
-    return render(request, 'quizzes/categorized_quiz_list.html', context)
+    return render(request, 'quizzes/quiz_list.html', context)
 
 @login_required
 def quiz_detail_view(request, category_id, quiz_id):

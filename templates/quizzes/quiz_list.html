@@ -1,23 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-    <h4>Categories: </h4>
-    <ul>
-    {% for c in categories %}
-        <li><a href="{% url 'quizzes:categorized_quiz_list' c.category %}">{{ c.category }}</a></li>
-    {% endfor %}
-    </ul>
-    <br>
+    {% if categoies %}
+        <h4>Categories: </h4>
+        <ul>
+        {% for c in categories %}
+            <li><a href="{% url 'quizzes:categorized_quiz_list' c.category %}">{{ c.category }}</a></li>
+        {% endfor %}
+        </ul>
+        <br>
+    {% endif %}
     <h4>Quizzes: </h4>
     {% if request.user.is_staff %}
-        <li><a href="{% url 'quizzes:admin-quiz-create'%}">Add-Quiz</a></li>
+        <li><a href="{% url 'quizzes:create_quiz'%}">Add-Quiz</a></li>
+
         {% for q in quizzes %}
             <div class="card">
                 <div class="card-header">
                     <span class="font-weight-bold">
-                        <a href="{% url 'quizzes:admin-quiz-detail' q.id %}">{{ q.title }}</a>
+                        <a href="{% url 'quizzes:quiz_detail' q.id %}">{{ q.title }}</a>
                     </span> &middot;
                     <span class="text-muted">
-                       &emsp; <a href="{% url 'quizzes:admin-quiz-update' q.id %}">update</a> &emsp; | &emsp; category: {{ q.category }} &emsp; | &emsp; difficulty: {{ q.difficulty }} &emsp; | &emsp; duration {{ q.duration }}
+                       &emsp; <a href="{% url 'quizzes:edit_quiz' q.id %}">update</a> &emsp; | &emsp; category: {{ q.category }} &emsp; | &emsp; difficulty: {{ q.difficulty }} &emsp; | &emsp; duration {{ q.duration }}
                     </span>
                 </div>
                 <div class="card-body">

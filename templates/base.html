@@ -14,7 +14,7 @@
 		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
 			<div class="container-fluid">
 			{%if request.user.is_staff%}
-				<a class="navbar-brand" href="{% url 'pages:staff-home' %}">Education Management System</a>
+				<a class="navbar-brand" href="{% url 'pages:staff' %}">Education Management System</a>
 			{%else%}
 				<a class="navbar-brand" href="{% url 'pages:home' %}">Education Management System</a>
 			{% endif%}
