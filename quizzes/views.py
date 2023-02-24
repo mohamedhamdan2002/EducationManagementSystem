@@ -88,7 +88,7 @@ def quiz_result_view(request, category_id, quiz_id, submission_id):
     context = {
         'submission': submission,
         'score': submission.get_total_score(),
-        'total': len(submission.quiz.questions.all()),
+        'total': submission.quiz.questions.all().count(),
     }
 
     return render(request, 'quizzes/quiz_result.html', context)
