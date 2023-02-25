@@ -1,67 +1,80 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>education management system</title>
-		<!-- Bootstrap CSS -->
-		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-		<!-- CSS -->
-		<!--<link rel="stylesheet" href="{% static 'css/base.css' %}">-->
-	</head>
-	<body>
-		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-			<div class="container-fluid">
+
+<head>
+	<meta charset="utf-8">
+	<title>education management system</title>
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+	<!-- CSS -->
+	<!--<link rel="stylesheet" href="{% static 'css/base.css' %}">-->
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+		<div class="container-fluid">
 			{%if request.user.is_staff%}
-				<a class="navbar-brand" href="{% url 'pages:staff' %}">Education Management System</a>
+			<a class="navbar-brand" href="{% url 'pages:staff' %}">Education Management System</a>
 			{%else%}
-				<a class="navbar-brand" href="{% url 'pages:home' %}">Education Management System</a>
+			<a class="navbar-brand" href="{% url 'pages:home' %}">Education Management System</a>
 			{% endif%}
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-targ\et="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarCollapse">
-					<ul class="navbar-nav me-auto mb-2 mb-md-0">
-						<li class="nav-item">
-							<a class="nav-link" href="{% url 'quizzes:quiz_list' %}">Quizzes list</a>
-						</li>
-						{% if user.is_authenticated %}
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'accounts:profile' %}">Profile</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'accounts:logout' %}">Log Out</a>
-							</li>
-						{% else %}
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'accounts:login' %}">Log In</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
-							</li>
-						{% endif %}
-					</ul>
-					<form class="d-flex" action="{% url 'quizzes:search' %}" method="get">
-						<input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search" >
-						<button class="btn btn-outline-success" type="submit">Search</button>
-					</form>
-				</div>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-targ\et="#navbarCollapse"
+				aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="navbar-nav me-auto mb-2 mb-md-0">
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'quizzes:quiz_list' %}">Quizzes list</a>
+					</li>
+					{% if user.is_authenticated %}
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'accounts:profile' %}">Profile</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'accounts:logout' %}">Log Out</a>
+					</li>
+					{% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'accounts:login' %}">Log In</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
+					</li>
+					{% endif %}
+				</ul>
+				<form class="d-flex" action="{% url 'quizzes:search' %}" method="get">
+					<input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-success" type="submit">Search</button>
+				</form>
 			</div>
-		</nav>
-		<br>
-		<br>
-		<br>
-		<div class="container">
-			{% block content %}
-			{% endblock content %}
 		</div>
-		<!-- Optional JavaScript -->
-		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-		<!-- JavaScript -->
-		<script src="{% static 'js/base.js' %}"></script>
-	</body>
+	</nav>
+	<br>
+	<br>
+	<br>
+	<div class="container">
+		{% block content %}
+		{% endblock content %}
+	</div>
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<!-- JavaScript -->
+	<script src="{% static 'js/base.js' %}"></script>
+</body>
+
 </html>
