@@ -3,7 +3,7 @@ import uuid
 
 from django.utils import timezone as tz
 from django.db import models
-
+from django.urls import reverse
 from accounts.models import CustomUser
 
 
@@ -52,6 +52,10 @@ class Quiz(models.Model):
 
     def __str__(self):
         return self.title 
+
+
+    def get_absolute_url(self):
+        return reverse('quizzes:quiz_detail',kwargs={'quiz_id':self.id})
 
     def score_to_pass(self):
         return ceil((len(self.quiz.questions.all()) * 70.0) / 100.0)

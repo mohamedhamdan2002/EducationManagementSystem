@@ -2,15 +2,131 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+
+
+from .form import QuizForm,QuestionForm,QuestionFromset,TagFromset,AnswerFormset
+from accounts.decorators import admin_only
 
 from .models import (
     Category, 
     Quiz, 
     Question,
+    Tag,
     Answer,
     Submission,
     AnswerItem,
 )
+
+@login_required
+@admin_only
+def admin_create_quiz(request):
+    quiz_form=QuizForm(request.POST or None)
+    Tformset=TagFromset(request.POST or None) # T ->tag
+    formset=QuestionFromset(request.POST or None)
+    context={
+        'quiz_form':quiz_form,
+        'formset':formset,
+        'Tformset':Tformset
+    }
+    if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
+        quiz=quiz_form.save()
+        for form in formset:
+            qs=Question.objects.get(id=form.cleaned_data['question'].id)
+            quiz.questions.add(qs)
+        for form in Tformset:
+            qs=Tag.objects.get(id=form.cleaned_data['tag'].id)
+            quiz.tags.add(qs)
+        return redirect(quiz.get_absolute_url())
+    return render(request,'staff/update_create.html',context)
+
+
+@login_required
+@admin_only
+def admin_update_quiz(request,quiz_id=None):
+    quiz_obj=get_object_or_404(Quiz,id=quiz_id)
+    quiz_form=QuizForm(request.POST or None,instance=quiz_obj)
+    formset=QuestionFromset(request.POST or None,instance=quiz_obj)
+    Tformset=TagFromset(request.POST or None,instance=quiz_obj) # T ->tag
+    context={
+        'quiz': quiz_obj,
+        'quiz_form':quiz_form,
+        'formset':formset,
+        'Tformset':Tformset,
+    }
+    if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
+        quiz=quiz_form.save()
+        print(formset.cleaned_data)
+        for form in formset:
+            q=Question.objects.get(id=form.cleaned_data['question'].id)
+            if form.cleaned_data['DELETE']:
+                quiz.questions.remove(q)
+            else:
+                qs=quiz.questions.all()
+                if q not in qs:
+                    quiz.questions.add(q)
+        for form in Tformset:
+            q=Tag.objects.get(id=form.cleaned_data['tag'].id)
+            if form.cleaned_data['DELETE']:
+                quiz.tags.remove(q)
+            else:
+                qs=quiz.tags.all()
+                if q not in qs:
+                    quiz.tags.add(q)            
+        return redirect(quiz.get_absolute_url())
+    return render(request,'staff/update_create.html',context)
+
+
+@login_required
+@admin_only
+def admin_quiz_detail_view(request,quiz_id=None):
+    quiz=get_object_or_404(Quiz,id=quiz_id)
+    context={
+        "quiz":quiz,
+    }
+    return render(request,"staff/quiz_detail.html",context)
+
+
+
+@login_required
+@admin_only
+def admin_create_questions(request):
+    question_form=QuestionForm(request.POST or None)
+    formset=AnswerFormset(request.POST or None)
+    context={
+        'question_form':question_form,
+        'formset':formset,
+    }
+    if all([question_form.is_valid(),formset.is_valid()]):
+        question=question_form.save()
+        for form in formset:
+            qs=Answer.objects.get(id=form.cleaned_data['answer'].id)
+            question.answers.add(qs)
+        return redirect('quizzes:question_list')
+    return render(request,'staff/question_create.html',context)
+
+
+
+@login_required
+@admin_only
+def admin_questions_list_view(request):
+    questions=Question.objects.all()
+    context={
+        "questions":questions,
+    }
+    return render(request,"staff/question_list.html",context)
+
+@login_required
+@admin_only
+def admin_َquestion_detail_view(request,question_id=None):
+    question=get_object_or_404(Question,id=question_id)
+    context={
+        "question":question,
+    }
+    return render(request,"staff/question_detail.html",context)
+
+
+
 
 @login_required
 def category_list_view(request):
@@ -29,7 +145,7 @@ def categorized_quiz_list_view(request, category_id):
     context = {
         "quizzes": quiz,
     }
-    return render(request, 'quizzes/categorized_quiz_list.html', context)
+    return render(request, 'quizzes/quiz_list.html', context)
 
 @login_required
 def quiz_detail_view(request, category_id, quiz_id):

@@ -1,31 +1,57 @@
 {% extends "base.html" %}
-
 {% block content %}
-    <h4>Categories: </h4>
-    <ul>
-    {% for c in categories %}
-        <li><a href="{% url 'quizzes:categorized_quiz_list' c.category %}">{{ c.category }}</a></li>
-    {% endfor %}
-    </ul>
-    <br>
-    <h4>Quizzes: </h4>
-    {% for q in quizzes %}
-        <div class="card">
-            <div class="card-header">
-                <span class="font-weight-bold">
-                    <a href="{% url 'quizzes:quiz_detail' q.category q.id %}">{{ q.title }}</a>
-                </span> &middot;
-                <span class="text-muted">
-                    &emsp; category: {{ q.category }} &emsp; | &emsp; difficulty: {{ q.difficulty }} &emsp; | &emsp; duration {{ q.duration }}
-                </span>
-            </div>
-            <div class="card-body">
-                <h6>tags: </h6>
-                {% for t in q.tags.all %}
-                    <span class="font-weight-bold">{{ t.tag }} &middot;</span>
-                {% endfor %}
-            </div>
-        </div>
+    {% if categoies %}
+        <h4>Categories: </h4>
+        <ul>
+        {% for c in categories %}
+            <li><a href="{% url 'quizzes:categorized_quiz_list' c.category %}">{{ c.category }}</a></li>
+        {% endfor %}
+        </ul>
         <br>
-    {% endfor %}
+    {% endif %}
+    <h4>Quizzes: </h4>
+    {% if request.user.is_staff %}
+        <li><a href="{% url 'quizzes:create_quiz'%}">Add-Quiz</a></li>
+
+        {% for q in quizzes %}
+            <div class="card">
+                <div class="card-header">
+                    <span class="font-weight-bold">
+                        <a href="{% url 'quizzes:quiz_detail' q.id %}">{{ q.title }}</a>
+                    </span> &middot;
+                    <span class="text-muted">
+                       &emsp; <a href="{% url 'quizzes:edit_quiz' q.id %}">update</a> &emsp; | &emsp; category: {{ q.category }} &emsp; | &emsp; difficulty: {{ q.difficulty }} &emsp; | &emsp; duration {{ q.duration }}
+                    </span>
+                </div>
+                <div class="card-body">
+
+                    <h6>tags: </h6>
+                    {% for t in q.tags.all %}
+                        <span class="font-weight-bold">{{ t.tag }} &middot;</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    {%else%}
+        {% for q in quizzes %}
+            <div class="card">
+                <div class="card-header">
+                    <span class="font-weight-bold">
+                        <a href="{% url 'quizzes:quiz_detail' q.category q.id %}">{{ q.title }}</a>
+                    </span> &middot;
+                    <span class="text-muted">
+                        &emsp; category: {{ q.category }} &emsp; | &emsp; difficulty: {{ q.difficulty }} &emsp; | &emsp; duration {{ q.duration }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <h6>tags: </h6>
+                    {% for t in q.tags.all %}
+                        <span class="font-weight-bold">{{ t.tag }} &middot;</span>
+                    {% endfor %}
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+    {%endif%}
 {% endblock content %}
