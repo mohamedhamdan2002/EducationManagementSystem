@@ -178,8 +178,31 @@ def admin_create_answer(request):
     }
     if form.is_valid():
         form.save();
-        return redirect('/')
-    return render(request,'staff/answer_create.html',context)
+        return redirect('quizzes:answer_list')
+    return render(request,'staff/answer_update_create.html',context)
+
+
+@login_required
+@admin_only
+def admin_update_answer(request,answer_id=None):
+    answer_obj=get_object_or_404(Answer,id=answer_id)
+    form=AnswerForm(request.POST or None,instance=answer_obj)
+    context={
+        "form":form
+    }
+    if form.is_valid():
+        form.save();
+        return redirect('quizzes:answer_list')
+    return render(request,'staff/answer_update_create.html',context)
+
+@login_required
+@admin_only
+def admin_answers_list_view(request):
+    answers=Answer.objects.all()
+    context={
+        "answers":answers,
+    }
+    return render(request,"staff/answer_list.html",context)
 
 
 
