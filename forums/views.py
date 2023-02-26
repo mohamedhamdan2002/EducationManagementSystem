@@ -13,7 +13,7 @@ def article_list_view(request):
 
 @login_required
 def article_detail_view(request, article_id):
-    article = Article.objects.get(id=id)
+    article = Article.objects.get(id=article_id)
     context = {
         "article": article
     }
