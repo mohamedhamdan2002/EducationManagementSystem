@@ -64,8 +64,8 @@ class Quiz(models.Model):
     def score_to_pass(self):
         return ceil((len(self.quiz.questions.all()) * 70.0) / 100.0)
 
-    def daily_subm_limit_exceeded(self):
-        return self.submissions.filter(start_time__date=date.today()).count() > self.daily_subm_limit
+    def daily_subm_limit_exceeded(self, user):
+        return self.submissions.filter(user=user, start_time__date=date.today()).count() > self.daily_subm_limit
 
 class Submission(models.Model):
     id = models.UUIDField(
