@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
 
-from .form import QuizForm,QuestionForm,QuestionFromset,TagFromset,AnswerFormset
+from .form import QuizForm,QuestionForm,QuestionFromset,TagFromset,AnswerFormset,AnswerForm
 from accounts.decorators import admin_only
 
 from .models import (
@@ -125,7 +125,7 @@ def admin_create_questions(request):
 
 @login_required
 @admin_only
-def admin_update_question(request,question_id=None):
+def admin_update_questions(request,question_id=None):
     question_obj=get_object_or_404(Question,id=question_id)
     question_form=QuestionForm(request.POST or None,instance=question_obj)
     formset=AnswerFormset(request.POST or None,instance=question_obj)
@@ -167,6 +167,21 @@ def admin_َquestion_detail_view(request,question_id=None):
         "question":question,
     }
     return render(request,"staff/question_detail.html",context)
+
+
+@login_required
+@admin_only
+def admin_create_answer(request):
+    form=AnswerForm(request.POST or None)
+    context={
+        "form":form
+    }
+    if form.is_valid():
+        form.save();
+        return redirect('/')
+    return render(request,'staff/answer_create.html',context)
+
+
 
 
 

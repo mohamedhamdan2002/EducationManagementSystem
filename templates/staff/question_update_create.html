@@ -12,14 +12,16 @@
         {% csrf_token %}
         <h2>Question</h2>
         {{ question_form.as_p }}
+        <P>New Answer <a href="{% url 'quizzes:create_answer'%}" target='_blank'>+</a></P>
             <br><br> 
         {% if formset %}
             <h3>Question-answers</h3>
+            
             <div id='answer-form-list'>
                 {{formset.management_form}}
                 {% for form in formset %}
                  <div class='answer-form'>
-                    {{ form.as_p }}
+                    {{ form.as_p }} 
                  </div>
                  {% endfor %}
             </div>
