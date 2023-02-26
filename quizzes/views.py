@@ -330,6 +330,9 @@ def quiz_detail_view(request, category_id, quiz_id):
         return redirect(reverse('quizzes:quiz_result', args=(category_id, quiz_id, request.user.get_last_submission(quiz=quiz).id)))
     quiz = Quiz.objects.get(pk=quiz_id)
     
+    if quiz.daily_subm_limit_exceeded(request.user):
+        return render(request, 'quizzes/quiz_detail.html', {'error': 'daily submissions limit exceded'})
+
     submission = None
     try:
         subm = request.user.get_last_submission(quiz)
