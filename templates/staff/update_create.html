@@ -19,6 +19,7 @@
         {% csrf_token %}
         <h2>Quiz</h2>
         {{ quiz_form.as_p }}
+        <P>New Category <a href="{% url 'quizzes:create_category'%}" target='_blank'>+</a></P>
             <br><br> 
         {% if formset %}
             <h3>Quiz-Questions</h3>

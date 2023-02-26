@@ -10,7 +10,8 @@
         </div>
     </div>
     <div>
-     <a href="{% url 'quizzes:edit_question' question.id %}">edit</a>
+     <a href="{% url 'quizzes:edit_question' question.id %}">Edit</a> | 
+     <a href="{% url 'quizzes:delete_question' question.id %}">Delete</a>
     <p>Answers:</p>
     {% for ans in question.answers.all %}
         <ul>

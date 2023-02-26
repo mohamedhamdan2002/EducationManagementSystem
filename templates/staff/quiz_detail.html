@@ -2,11 +2,13 @@
 
 {% block content %}
     <h4>{{ quiz.title }}:</h4><br>
+    <p><a href="{% url 'quizzes:delete_quiz' quiz.id %}">Delete</a></p>
     <span class="font-weight-bold">
        <p> Duration: {{quiz.duration}}</p>
     </span>
     <p>Category: {{quiz.category}}</p>
     <p>Difficulty: {{quiz.difficulty}}</p>
+    
     <br><br>  
     <h4>Quiz-Questions</h4>
     {% for q in quiz.questions.all %}
@@ -28,6 +30,7 @@
             </div>
         </ol>
         <br>
+
     {% endfor %}
 
 {% endblock content %}

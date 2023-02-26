@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
 
-from .form import QuizForm,QuestionForm,QuestionFromset,TagFromset,AnswerFormset,AnswerForm
+from .form import QuizForm,QuestionForm,QuestionFromset,TagFromset,AnswerFormset,AnswerForm,CategoryForm
 from accounts.decorators import admin_only
 
 from .models import (
@@ -188,6 +188,7 @@ def admin_update_answer(request,answer_id=None):
     answer_obj=get_object_or_404(Answer,id=answer_id)
     form=AnswerForm(request.POST or None,instance=answer_obj)
     context={
+        "answer":answer_obj,
         "form":form
     }
     if form.is_valid():
@@ -205,7 +206,100 @@ def admin_answers_list_view(request):
     return render(request,"staff/answer_list.html",context)
 
 
+@login_required
+@admin_only
+def admin_create_category(request):
+    form=CategoryForm(request.POST or None)
+    context={
+        "form":form
+    }
+    if form.is_valid():
+        form.save();
+        return redirect('quizzes:category_list')
+    return render(request,'staff/category_update_create.html',context)
 
+
+@login_required
+@admin_only
+def admin_update_category(request,category_id=None):
+    category_obj=get_object_or_404(Category,id=category_id)
+    form=CategoryForm(request.POST or None,instance=category_obj)
+    context={
+        'category':category_obj,
+        "form":form
+    }
+    if form.is_valid():
+        form.save();
+        return redirect('quizzes:category_list')
+    return render(request,'staff/category_update_create.html',context)
+
+@login_required
+@admin_only
+def admin_category_list_view(request):
+    categories=Category.objects.all()
+    context={
+        "categories":categories,
+    }
+    return render(request,"staff/category_list.html",context)
+
+@login_required
+@admin_only
+def admin_delete_quiz(request,quiz_id=None):
+    context={
+        'quiz_id':quiz_id,
+        'ty':'quiz',
+        'n':1,
+    }
+    if request.POST:
+        quiz=get_object_or_404(Quiz,id=quiz_id)
+        quiz.delete()
+        return redirect('quizzes:quiz_list')
+    return render(request,"staff/delete.html",context)
+
+
+@login_required
+@admin_only
+def admin_delete_question(request,question_id=None):
+    context={
+        'question_id':question_id,
+        'ty':"question",
+        'n':2,
+    }
+    if request.POST:
+        question=get_object_or_404(Question,id=question_id)
+        question.delete()
+        return redirect('quizzes:question_list')
+    return render(request,"staff/delete.html",context)
+
+
+@login_required
+@admin_only
+def admin_delete_answer(request,answer_id=None):
+    context={
+        'answer_id':answer_id,
+        'ty':"answer",
+        'n':3,
+    }
+    if request.POST:
+        answer=get_object_or_404(Answer,id=answer_id)
+        answer.delete()
+        return redirect('quizzes:answer_list')
+    return render(request,"staff/delete.html",context)
+
+
+@login_required
+@admin_only
+def admin_delete_category(request,category_id=None):
+    context={
+        'category_id':category_id,
+        'ty':"category",
+
+    }
+    if request.POST:
+        categroy=get_object_or_404(Category,id=category_id)
+        categroy.delete()
+        return redirect('quizzes:category_list')
+    return render(request,"staff/delete.html",context)
 
 
 
