@@ -1,5 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-
-
+    <div class="card">
+        <div class="card-header">
+            <span class="font-weight-bold">
+                {{ article.title }}
+            </span> &middot;
+            <span class="text-muted">
+                &emsp; created at: {{ article.time_created }} 
+            </span>
+            <span class="font-weight-bold">
+                &emsp; | &emsp; by: {{ article.author.get_full_name }}
+            </span>
+        </div>
+        <div class="card-body">
+            <span class="font-weight-bold">{{ article.content }} &middot;</span>
+        </div>
+        <div class="card-footer">
+            {% for c in article.comments.all %}
+                <div class="card-header">
+                    <span class="font-weight-bold">
+                        {{ c.author.get_full_name }}
+                    </span>
+                    <span class="text-muted">
+                        &emsp; created at: {{ c.time_created }} 
+                    </span>
+                </div>
+                <div class="card-body">
+                    <span class="font-weight-bold">
+                        {{ c.content }}
+                    </span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
 {% endblock content %}

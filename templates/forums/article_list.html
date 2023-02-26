@@ -1,5 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
-
-
+    {% for a in articles %}
+        <div class="card">
+            <div class="card-header">
+                <span class="font-weight-bold">
+                    <a href="{% url 'forums:article_detail' a.id %}">{{ a.title }}</a>
+                </span> &middot;
+                <span class="text-muted">
+                    &emsp; created at: {{ a.time_created }}
+                </span>
+                <span class="font-weight-bold">
+                    &emsp; | &emsp; by: {{ a.author.get_full_name }}
+                </span>
+            </div>
+            <div class="card-body">
+                <span class="font-weight-bold">{{ a.content }} &middot;</span>
+            </div>
+            <div class="card-footer">
+                comments: <span class="font-weight-bold">{{ a.comments.all.count }} &middot;</span>
+            </div>
+        </div>
+        <br>
+    {% endfor %}
 {% endblock content %}
