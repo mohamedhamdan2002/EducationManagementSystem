@@ -12,16 +12,46 @@
             </span> &middot;
         </div>
         <div class="card-body">
-            {% for s in submissions %}
-            <div>
-                <span class="font-weight-bold">
-                    Quiz: <a href="{% url 'quizzes:quiz_detail' s.quiz.category.category s.quiz.id %}">{{s.quiz.title}}</a>
-                    &emsp; | &emsp; Score: {{s.get_total_score}} 
-                    &emsp; | &emsp; When: {{s.start_time}}
-                    &emsp; | &emsp; Submission: <a href="{% url 'quizzes:quiz_result' s.quiz.category.category s.quiz.id s.id %}">{{s.id}}</a>
-                </span>
-            </div>
-            {% endfor %}
+            <table>
+                <tr>
+                    <th>Quiz</th>
+                    <th>&emsp; | &emsp; Score</th>
+                    <th>&emsp; | &emsp; When</th>
+                    <th>&emsp; | &emsp; Submission</th>
+                </tr>
+                <tr>
+                    <td>_____</td>
+                    <td>&emsp; | &emsp;_____</td>
+                    <td>&emsp; | &emsp;_____</td>
+                    <td>&emsp; | &emsp;_____</td>
+                </tr>
+                {% for s in submissions %}
+                <div>
+                    <tr>
+                        <td>
+                            <span class="font-weight-bold">
+                                <a href="{% url 'quizzes:quiz_detail' s.quiz.category.category s.quiz.id %}">{{s.quiz.title}}</a>
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                &emsp; | &emsp; {{s.get_total_score}} 
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                &emsp; | &emsp; {{s.start_time}}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                &emsp; | &emsp; <a href="{% url 'quizzes:quiz_result' s.quiz.category.category s.quiz.id s.id %}">{{s.id}}</a>
+                            </span>
+                        </td>
+                    </tr>
+                </div>
+                {% endfor %}
+            </table>
         </div>
     </div> 
 {% endblock content %}
