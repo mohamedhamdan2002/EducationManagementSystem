@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .hidden{
+        display: none
+    }
+</style>
+    {% if message %}
+        <h2>{{message}}</h2>
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <h2>Question</h2>
+        {{ question_form.as_p }}
+            <br><br> 
+        {% if formset %}
+            <h3>Question-answers</h3>
+            <div id='answer-form-list'>
+                {{formset.management_form}}
+                {% for form in formset %}
+                 <div class='answer-form'>
+                    {{ form.as_p }}
+                 </div>
+                 {% endfor %}
+            </div>
+             <div id='answer-empty-form' class='hidden' >{{formset.empty_form.as_p}}</div>
+            <button id='add-more-answer' class="btn btn-outline-success ml-2"  type='button'>SetAnswer</button>
+        {% endif %}
+        <br><br>
+        <button class="btn btn-success ml-2" type="submit">save</button>
+    </form>
+<script>
+    //add more Answer
+    const addMoreAnswer=document.getElementById('add-more-answer')
+    const totalNewFroms=document.getElementById('id_Question_answers-TOTAL_FORMS')
+    addMoreAnswer.addEventListener('click',Set_Answer)
+
+    function Set_Answer(event){
+        if(event){
+            event.preventDefault()
+        }
+
+        const currentAnswerFroms=document.getElementsByClassName('answer-form')
+        const currentFormCount=currentAnswerFroms.length
+        const formCopyTarget=document.getElementById('answer-form-list')
+        const copyEmptyAnswerFormEl=document.getElementById('answer-empty-form').cloneNode(true)
+        copyEmptyAnswerFormEl.setAttribute('class','answer-form')
+        copyEmptyAnswerFormEl.setAttribute('id',`form-${currentFormCount}`)
+        const regex=new RegExp('__prefix__','g')
+        copyEmptyAnswerFormEl.innerHTML=copyEmptyAnswerFormEl.innerHTML.replace(regex,currentFormCount)
+        totalNewFroms.setAttribute('value',currentFormCount+1)
+        formCopyTarget.append(copyEmptyAnswerFormEl)
+    }
+
+
+</script>
+
+
+{% endblock content %}
