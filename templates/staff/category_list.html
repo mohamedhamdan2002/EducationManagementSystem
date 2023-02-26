@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <h4>Categories: </h4>
+    <li><a href="{% url 'quizzes:create_category' %}">Add-category</a></li>
+    <ul>
+    {% for cat in categories %}
+        <li><a href="{% url 'quizzes:edit_category' cat.id %}">{{ cat.category }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock content %}

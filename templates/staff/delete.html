@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <h2>Delete-{{ty}}</h2>
+            are you sure that you want to delete {{ty}} ?
+        <br><br>
+        {% if n == 1 %}
+        <a class="btn btn-outline-success ml-2" href="{% url 'quizzes:quiz_detail' quiz_id %}">Return</a>
+        {% elif n == 2 %}
+        <a class="btn btn-outline-success ml-2" href="{% url 'quizzes:question_detail' question_id %}">Return</a>
+        {% elif n == 3 %}
+        <a class="btn btn-outline-success ml-2" href="{% url 'quizzes:edit_answer' answer_id %}">Return</a>
+        {% else %}
+         <a class="btn btn-outline-success ml-2" href="{% url 'quizzes:edit_category' category_id %}">Return</a>
+        {%endif%}
+        <button class="btn btn-success ml-2" type="submit">Delete</button>
+    </form>
+
+
+{% endblock content %}

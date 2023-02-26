@@ -37,6 +37,9 @@ class Question(models.Model):
 
     def __str__(self):
         return self.question
+    
+    def get_absolute_url(self):
+        return reverse("quizzes:question_detail",kwargs={'question_id':self.id})
 
 class Quiz(models.Model):
     title = models.CharField(max_length=250)

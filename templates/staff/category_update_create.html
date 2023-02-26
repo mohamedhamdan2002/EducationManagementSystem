@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <h2>category</h2>
+            {{form.as_p }}
+        <br><br>
+        {%if category %}
+        <a class="btn btn-success ml-2" href="{% url 'quizzes:delete_category' category.id %}">Delete</a>
+        {%endif%}
+        <button class="btn btn-success ml-2" type="submit">save</button>
+    </form>
+
+
+{% endblock content %}

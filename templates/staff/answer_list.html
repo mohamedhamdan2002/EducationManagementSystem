@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <h4>Answers: </h4>
+    <li><a href="{% url 'quizzes:create_answer' %}">Add-Answers</a></li>
+    <ul>
+    {% for ans in answers%}
+        <li><a href="{% url 'quizzes:edit_answer' ans.id %}">{{ ans.answer }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock content %}

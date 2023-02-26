@@ -5,11 +5,13 @@
     <div class="card">      
     <div class="card-header">
         <span class="font-weight-bold">
-            {{question.question}}
+            {{question.question}}  
         </span> &middot;
         </div>
     </div>
     <div>
+     <a href="{% url 'quizzes:edit_question' question.id %}">Edit</a> | 
+     <a href="{% url 'quizzes:delete_question' question.id %}">Delete</a>
     <p>Answers:</p>
     {% for ans in question.answers.all %}
         <ul>
