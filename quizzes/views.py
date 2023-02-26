@@ -32,19 +32,17 @@ def admin_create_quiz(request):
     if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
         quiz=quiz_form.save()
         for form in formset:
-            try:
+            if form.cleaned_data:
                 if not form.cleaned_data['DELETE']:
                     qs=Question.objects.get(id=form.cleaned_data['question'].id)
                     quiz.questions.add(qs)
-            except:
-                continue
+
         for form in Tformset:
-            try:
+            if form.cleaned_data:
                 if not form.cleaned_data['DELETE']:
                     qs=Tag.objects.get(id=form.cleaned_data['tag'].id)
                     quiz.tags.add(qs)
-            except:
-                continue
+
         return redirect(quiz.get_absolute_url())
     return render(request,'staff/update_create.html',context)
 
@@ -65,7 +63,7 @@ def admin_update_quiz(request,quiz_id=None):
     if all([quiz_form.is_valid(),formset.is_valid(),Tformset.is_valid()]):
         quiz=quiz_form.save()
         for form in formset:
-            try:
+            if form.cleaned_data:
                 q=Question.objects.get(id=form.cleaned_data['question'].id)
                 if form.cleaned_data['DELETE']:
                     quiz.questions.remove(q)
@@ -73,10 +71,9 @@ def admin_update_quiz(request,quiz_id=None):
                     qs=quiz.questions.all()
                     if q not in qs:
                         quiz.questions.add(q)
-            except:
-                continue
+
         for form in Tformset:
-            try:
+            if form.cleaned_data:
                 q=Tag.objects.get(id=form.cleaned_data['tag'].id)
                 if form.cleaned_data['DELETE']:
                     quiz.tags.remove(q)
@@ -84,8 +81,7 @@ def admin_update_quiz(request,quiz_id=None):
                     qs=quiz.tags.all()
                     if q not in qs:
                         quiz.tags.add(q)
-            except:
-                continue            
+           
         return redirect(quiz.get_absolute_url())
     return render(request,'staff/update_create.html',context)
 
@@ -113,12 +109,11 @@ def admin_create_questions(request):
     if all([question_form.is_valid(),formset.is_valid()]):
         question=question_form.save()
         for form in formset:
-            try:
+            if form.cleaned_data:
                 if not form.cleaned_data['DELETE']:
                     qs=Answer.objects.get(id=form.cleaned_data['answer'].id)
                     question.answers.add(qs)
-            except:
-                continue
+
         return redirect(question.get_absolute_url())
     return render(request,'staff/question_update_create.html',context)
 
@@ -136,7 +131,7 @@ def admin_update_questions(request,question_id=None):
     if all([question_form.is_valid(),formset.is_valid()]):
         question=question_form.save()
         for form in formset:
-            try:
+            if form.cleaned_data:
                 ans=Answer.objects.get(id=form.cleaned_data['answer'].id)
                 if form.cleaned_data['DELETE']:
                     question.answers.remove(ans)
@@ -144,8 +139,6 @@ def admin_update_questions(request,question_id=None):
                     answers=question.answers.all()
                     if ans not in answers:
                         question.answers.add(ans)
-            except:
-                continue
         return redirect(question.get_absolute_url())
     return render(request,'staff/question_update_create.html',context)
 
