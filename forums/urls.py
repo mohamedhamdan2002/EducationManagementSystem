@@ -9,5 +9,5 @@ app_name = "forums"
 
 urlpatterns = [
     path("", article_list_view, name="article_list"),
-    path("<int:article_id>/", article_detail_view, name="article_details"),
+    path("<int:article_id>/", article_detail_view, name="article_detail"),
 ]
