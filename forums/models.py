@@ -1,11 +1,11 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
 from accounts.models import CustomUser
 
-# Create your models here.
+
 class Article(models.Model):
-    author = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name="articles"
-    )
+    author = get_user_model()
     title = models.CharField(max_length=100)
     content = models.TextField()
     time_created = models.DateTimeField(auto_now_add=True)
@@ -15,13 +15,13 @@ class Article(models.Model):
 
 
 class Comment(models.Model):
-    author = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name="comments"
-    )
+    author = get_user_model()
     content = models.TextField()
     time_created = models.DateTimeField(auto_now_add=True)
     article = models.ForeignKey(
-        Article, on_delete=models.CASCADE, related_name="comments"
+        Article, 
+        on_delete=models.CASCADE, 
+        related_name="comments"
     )
 
     def __str__(self) -> str:
