@@ -15,6 +15,7 @@ class QuizForm(forms.ModelForm):
             'category',
             'difficulty',
             'duration',
+            'daily_subm_limit',
         ]
 class QuestionForm(forms.ModelForm):
     class Meta:
