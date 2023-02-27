@@ -16,7 +16,7 @@ def sign_up_view(request):
         'form': form,
     }
     if form.is_valid():
-        user=form.save()
+        form.save()
         messages.success(request,"your account has been created! you are now able to log in")
         #CustomUser.objects.create(
         #    first_name=form.cleaned_data.get('first_name'),
@@ -26,8 +26,6 @@ def sign_up_view(request):
         #    username=form.cleaned_data.get('username'),
         #    password=make_password(form.cleaned_data.get('password1')),
         #)
-        group=Group.objects.get(name='students')
-        group.add(user)
         return redirect('accounts:login')
     return render(request, 'accounts/signup.html', context)
 
